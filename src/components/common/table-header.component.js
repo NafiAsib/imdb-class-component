@@ -20,9 +20,19 @@ class TableHeader extends Component {
     getSortingIcon = (item, sortingProps) => {
         if (sortingProps.key === item.key) {
             if (sortingProps.order === 'asc') {
-                return <i className="bi bi-sort-down" />;
+                return (
+                    <i
+                        className="bi bi-sort-down"
+                        style={{ cursor: 'pointer' }}
+                    />
+                );
             } else {
-                return <i className="bi bi-sort-down-alt" />;
+                return (
+                    <i
+                        className="bi bi-sort-down-alt"
+                        style={{ cursor: 'pointer' }}
+                    />
+                );
             }
         } else return null;
     };

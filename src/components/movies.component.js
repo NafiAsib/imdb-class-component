@@ -24,7 +24,7 @@ class Movies extends Component {
     }
 
     onFilter = (genre) => {
-        this.setState({ ...this.state, selectedGenre: genre });
+        this.setState({ ...this.state, selectedGenre: genre, activePage: 1 });
     };
 
     filterMovies = () => {
