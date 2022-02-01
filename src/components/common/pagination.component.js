@@ -17,7 +17,10 @@ class Pagination extends Component {
         return (
             <>
                 <nav>
-                    <ul className="pagination justify-content-center">
+                    <ul
+                        className="pagination flex-wrap justify-content-center"
+                        style={{ gap: '2px' }}
+                    >
                         <li
                             className={
                                 activePage === 1

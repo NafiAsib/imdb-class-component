@@ -2,15 +2,12 @@ import React, { Component } from 'react';
 
 class TableHeader extends Component {
     handleSort = ({ key, isSortable }) => {
-        // console.log('!okay');
         if (!isSortable) return null;
-        // console.log('okay');
+
         const { onSort, sortingProps } = this.props;
 
         if (sortingProps.key === key) {
             if (sortingProps.order === 'asc') {
-                console.log('okay');
-
                 onSort({ key, order: 'desc' });
             } else {
                 onSort({ key, order: 'asc' });

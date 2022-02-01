@@ -1,22 +1,40 @@
 import React, { Component } from 'react';
 import Table from './table.component';
 import getMovies from '../service/get-movies.service';
+import getGenres from '../service/get-genres.service';
 import Rating from './rating.component';
 import Pagination from './common/pagination.component';
 import _ from 'lodash';
+import Filter from './common/filter.component';
 
 class Movies extends Component {
     state = {
         movies: [],
+        genres: [],
         sortingProps: { key: 'id', order: 'asc' },
         activePage: 1,
-        itemsPerPage: 8,
+        itemsPerPage: 10,
+        selectedGenre: 'All',
     };
 
     componentDidMount() {
         const movies = getMovies();
-        this.setState({ movies });
+        const genres = ['All', ...getGenres()];
+        this.setState({ ...this.state, movies, genres });
     }
+
+    onFilter = (genre) => {
+        this.setState({ ...this.state, selectedGenre: genre });
+    };
+
+    filterMovies = () => {
+        const movies = [...this.state.movies];
+        const filteredMovies = movies.filter((movie) => {
+            if (this.state.selectedGenre === 'All') return true;
+            return movie.genres.includes(this.state.selectedGenre);
+        });
+        return filteredMovies;
+    };
 
     handleToggleFavourite = (id) => {
         const movies = [...this.state.movies];
@@ -33,9 +51,9 @@ class Movies extends Component {
         this.setState({ ...this.state, sortingProps });
     };
 
-    sortMovies = () => {
+    sortMovies = (filteredMovies) => {
         const { sortingProps } = this.state;
-        const movies = [...this.state.movies];
+        const movies = [...filteredMovies];
 
         const sortedMovies = _.orderBy(
             movies,
@@ -53,7 +71,8 @@ class Movies extends Component {
     };
 
     render() {
-        const sortedMovies = this.sortMovies();
+        const filteredMovies = this.filterMovies();
+        const sortedMovies = this.sortMovies(filteredMovies);
         const moviesToRender = this.paginateMovies(sortedMovies);
         const movieColumns = [
             {
@@ -101,20 +120,31 @@ class Movies extends Component {
         ];
 
         return (
-            <>
-                <Table
-                    items={moviesToRender}
-                    columns={movieColumns}
-                    sortingProps={this.state.sortingProps}
-                    onSort={this.handleSort}
-                />
-                <Pagination
-                    totalItems={this.state.movies.length}
-                    itemsPerPage={this.state.itemsPerPage}
-                    activePage={this.state.activePage}
-                    onClickPage={this.onClickPage}
-                />
-            </>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-sm-3">
+                        <Filter
+                            items={this.state.genres}
+                            selectedGenre={this.state.selectedGenre}
+                            onFilter={this.onFilter}
+                        />
+                    </div>
+                    <div className="col-8">
+                        <Table
+                            items={moviesToRender}
+                            columns={movieColumns}
+                            sortingProps={this.state.sortingProps}
+                            onSort={this.handleSort}
+                        />
+                        <Pagination
+                            totalItems={filteredMovies.length}
+                            itemsPerPage={this.state.itemsPerPage}
+                            activePage={this.state.activePage}
+                            onClickPage={this.onClickPage}
+                        />
+                    </div>
+                </div>
+            </div>
         );
     }
 }
