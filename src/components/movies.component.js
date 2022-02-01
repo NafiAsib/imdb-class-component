@@ -3,10 +3,12 @@ import Table from './table.component';
 import getMovies from '../service/get-movies.service';
 import Rating from './rating.component';
 import Pagination from './common/pagination.component';
+import _ from 'lodash';
 
 class Movies extends Component {
     state = {
         movies: [],
+        sortingProps: { key: 'id', order: 'asc' },
         activePage: 1,
         itemsPerPage: 8,
     };
@@ -27,6 +29,22 @@ class Movies extends Component {
         this.setState({ ...this.state, activePage });
     };
 
+    handleSort = (sortingProps) => {
+        this.setState({ ...this.state, sortingProps });
+    };
+
+    sortMovies = () => {
+        const { sortingProps } = this.state;
+        const movies = [...this.state.movies];
+
+        const sortedMovies = _.orderBy(
+            movies,
+            [sortingProps.key],
+            [sortingProps.order]
+        );
+        return sortedMovies;
+    };
+
     paginateMovies = (movies) => {
         const { activePage, itemsPerPage } = this.state;
         const start = (activePage - 1) * itemsPerPage;
@@ -35,7 +53,8 @@ class Movies extends Component {
     };
 
     render() {
-        const moviesToRender = this.paginateMovies(this.state.movies);
+        const sortedMovies = this.sortMovies();
+        const moviesToRender = this.paginateMovies(sortedMovies);
         const movieColumns = [
             {
                 label: 'Rank',
@@ -83,10 +102,15 @@ class Movies extends Component {
 
         return (
             <>
-                <Table items={moviesToRender} columns={movieColumns} />
+                <Table
+                    items={moviesToRender}
+                    columns={movieColumns}
+                    sortingProps={this.state.sortingProps}
+                    onSort={this.handleSort}
+                />
                 <Pagination
                     totalItems={this.state.movies.length}
-                    itemsPerPage={10}
+                    itemsPerPage={this.state.itemsPerPage}
                     activePage={this.state.activePage}
                     onClickPage={this.onClickPage}
                 />

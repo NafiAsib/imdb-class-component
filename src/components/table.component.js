@@ -6,11 +6,15 @@ class Table extends Component {
     state = {};
 
     render() {
-        const { items, columns } = this.props;
+        const { items, columns, sortingProps, onSort } = this.props;
         return (
             <>
                 <table className="table table-hover">
-                    <TableHeader columns={columns} />
+                    <TableHeader
+                        columns={columns}
+                        sortingProps={sortingProps}
+                        onSort={onSort}
+                    />
                     <TableBody items={items} columns={columns} />
                 </table>
             </>
