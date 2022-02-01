@@ -5,28 +5,21 @@ class TableBody extends Component {
         const { items, columns } = this.props;
 
         return (
-            <>
+            <tbody>
                 {items.map((item) => {
                     return (
-                        <tr>
-                            <th scope="row">{item.rank}</th>
-                            <td>{item.title}</td>
-                            <td>
-                                <img
-                                    src={item.posterUrl}
-                                    alt="poster"
-                                    height={100}
-                                    width={'auto'}
-                                />
-                            </td>
-                            <td>
-                                <i className="bi bi-heart"></i>
-                            </td>
-                            <td></td>
+                        <tr key={item.id}>
+                            {columns.map((data) => (
+                                <React.Fragment
+                                    key={item.id + ' ' + data.label}
+                                >
+                                    {data.content(item, data.key)}
+                                </React.Fragment>
+                            ))}
                         </tr>
                     );
                 })}
-            </>
+            </tbody>
         );
     }
 }

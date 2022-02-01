@@ -13,12 +13,12 @@ class Movies extends Component {
         this.setState({ movies });
     }
 
-    handleToggleFavourite(id) {
+    handleToggleFavourite = (id) => {
         const movies = [...this.state.movies];
         const movie = movies.find((movie) => movie.id === id);
         movie.isFavourite = !movie.isFavourite;
         this.setState({ ...this.state, movies });
-    }
+    };
 
     render() {
         const movieColumns = [

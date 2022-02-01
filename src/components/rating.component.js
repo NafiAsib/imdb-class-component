@@ -25,14 +25,14 @@ class Rating extends Component {
         const { handleToggleFavourite, id } = this.props;
 
         return (
-            <>
+            <td>
                 <i
                     onMouseOver={this.handleMouseOver}
                     onMouseOut={this.handleMouseOut}
                     onClick={() => handleToggleFavourite(id)}
                     className={this.getClassName()}
-                ></i>
-            </>
+                />
+            </td>
         );
     }
 }
