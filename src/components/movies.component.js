@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import Table from './table.component';
 import getMovies from '../service/get-movies.service';
 import Rating from './rating.component';
+import Pagination from './common/pagination.component';
 
 class Movies extends Component {
     state = {
         movies: [],
+        activePage: 1,
+        itemsPerPage: 8,
     };
 
     componentDidMount() {
@@ -20,7 +23,19 @@ class Movies extends Component {
         this.setState({ ...this.state, movies });
     };
 
+    onClickPage = (activePage) => {
+        this.setState({ ...this.state, activePage });
+    };
+
+    paginateMovies = (movies) => {
+        const { activePage, itemsPerPage } = this.state;
+        const start = (activePage - 1) * itemsPerPage;
+        const paginatedMovies = movies.slice(start, start + itemsPerPage);
+        return paginatedMovies;
+    };
+
     render() {
+        const moviesToRender = this.paginateMovies(this.state.movies);
         const movieColumns = [
             {
                 label: 'Rank',
@@ -68,7 +83,13 @@ class Movies extends Component {
 
         return (
             <>
-                <Table items={this.state.movies} columns={movieColumns} />
+                <Table items={moviesToRender} columns={movieColumns} />
+                <Pagination
+                    totalItems={this.state.movies.length}
+                    itemsPerPage={10}
+                    activePage={this.state.activePage}
+                    onClickPage={this.onClickPage}
+                />
             </>
         );
     }
