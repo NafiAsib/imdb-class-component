@@ -49,6 +49,11 @@ class TableHeader extends Component {
                                 scope="col"
                                 key={item.label}
                                 onClick={() => this.handleSort(item)}
+                                style={
+                                    item.isSortable
+                                        ? { cursor: 'pointer' }
+                                        : null
+                                }
                             >
                                 {item.label}{' '}
                                 {this.getSortingIcon(item, sortingProps)}

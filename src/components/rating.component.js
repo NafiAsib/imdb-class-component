@@ -31,6 +31,7 @@ class Rating extends Component {
                     onMouseOut={this.handleMouseOut}
                     onClick={() => handleToggleFavourite(id)}
                     className={this.getClassName()}
+                    style={{ cursor: 'pointer' }}
                 />
             </td>
         );
